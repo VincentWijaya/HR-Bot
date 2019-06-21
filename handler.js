@@ -1,14 +1,34 @@
 'use strict';
 
-module.exports.hello = async (event) => {
+const ssmStore = require('aws-param-store');
+const keys = ssmStore.getParameterSync([
+  'HR-Bot-client-email',
+  'HR-Bot-private-key',
+  'HR-Bot-sheetId',
+], {
+  region: 'ap-southeast-1'
+});
+
+const getSsmParams = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }, null, 2),
+      message: 'AWS SSM Params',
+      data: keys
+    }, null, 2)
   };
+};
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+const hello = async (event, context) => {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: 'Welcome to serverless!'
+    }, null, 2)
+  };
+};
+
+module.exports = {
+  getSsmParams,
+  hello
 };

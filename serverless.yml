@@ -16,5 +16,11 @@ functions:
     - http:
         path: hello
         method: GET
+  ssmParams:
+    handler: handler.getSsmParams
+    events:
+    - http:
+        path: ssm-params
+        method: GET
 plugins:
   - serverless-offline
